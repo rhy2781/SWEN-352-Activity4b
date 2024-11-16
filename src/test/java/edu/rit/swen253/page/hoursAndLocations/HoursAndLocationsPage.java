@@ -21,16 +21,24 @@ public class HoursAndLocationsPage extends AbstractAngularPage {
                 .allMatch(element -> element.getText().contains("Open")));
     }
 
-    public List<HoursAndLocationsView> getDiningLocations() {
-        List<DomElement> allLocations = findAllOnPage(By.className(".diningTabVerticalLine .ng-star-inserted"));
+    public List<HoursAndLocationsView> getAllDiningLocations() {
+        List<DomElement> allLocations = findAllOnPage(
+                By.cssSelector(".diningTabVerticalLine .col-lg-12.ng-star-inserted"));
+        return allLocations.stream().map(HoursAndLocationsView::new).toList();
+    }
 
+    public List<HoursAndLocationsView> getOpenDiningLocations() {
+        List<DomElement> allLocations = findAllOnPage(
+                By.cssSelector(".diningTabVerticalLine .col-lg-12.ng-star-inserted"));
+
+        // Filter locations that have the "diningTabOpenIcon" icon
         return allLocations.stream()
-            .filter(location -> {
-                String locationStatus = location.findChildBy(By.className("location-status")).getText();
-                return "Open".equalsIgnoreCase(locationStatus.trim());
-            })
-            .map(HoursAndLocationsView::new)
-            .toList();
+                .filter(location -> {
+                    DomElement openIcon = location.findChildBy(By.cssSelector("img.diningTabOpenIcon"));
+                    return openIcon.getAttribute("src").contains("open");
+                })
+                .map(HoursAndLocationsView::new)
+                .toList();
     }
 
     public void clickComputerIcon() {

@@ -18,8 +18,9 @@ public class HoursAndLocationsView {
     }
 
     public String getHours() {
-        DomElement locationDetails = element.findChildBy(By.className("diningTabTabGroupFix"));
-        return locationDetails.findChildBy(By.xpath(".//span[contains(@class, 'greenText')]")).getText();
+        DomElement locationDetails = element
+                .findChildBy(By.cssSelector(".diningTabTabGroupFix .col-lg-4.ng-star-inserted"));
+        return locationDetails.findChildBy(By.xpath(".//span[@class='greenText']")).getText();
     }
 
     public String getDescription() {
