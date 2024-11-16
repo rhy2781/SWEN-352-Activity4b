@@ -27,12 +27,12 @@ public class CalculatorPage extends AbstractAngularPage {
         // button.click();
     }
 
-    // public List<Course> getCourseList(){
-    //     List<DomElement> courses = mainContentPanel.findChildrenBy(By.className("w3-animate-opacity"));
-    //     return courses.stream()
-    //         .map(domElement -> new Course(domElement))
-    //         .collect(Collectors.toList());
-    // }
+    public List<Course> getCourseList(){
+        List<DomElement> courses = angularView.findChildrenBy(By.className("courseRow"));
+        return courses.stream()
+            .map(domElement -> new Course(domElement))
+            .collect(Collectors.toList());
+    }
 
 
 }
