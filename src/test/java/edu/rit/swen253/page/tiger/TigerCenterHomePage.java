@@ -41,9 +41,23 @@ public class TigerCenterHomePage extends AbstractAngularPage {
     findButtonLink(NavButton.CLASS_SEARCH).click();
   }
 
-  //
-  // Private
-  //
+  /**
+   * Select the <em>GPA Calculator</em> feature.
+   * <p>
+   * This action navigates to the GPA Calculator page of the TigerCenter app.
+   */
+  public void selectGPACalculator() {
+    findButtonLink(NavButton.GPA_CALCULATOR).click();
+  }
+
+  /**
+   * Select the <em>Hours & Locations</em> feature.
+   * <p>
+   * This action navigates to the Hours & Locations page of the TigerCenter app.
+   */
+  public void selectHoursAndLocations() {
+    findButtonLink(NavButton.HOURS_AND_LOCATIONS).click();
+  }
 
   private enum NavButton {
     CLASS_SEARCH("Class Search"),
