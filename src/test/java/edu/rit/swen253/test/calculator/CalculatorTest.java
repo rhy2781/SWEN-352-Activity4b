@@ -43,16 +43,26 @@ public class CalculatorTest extends AbstractWebTest{
         calculatorPage = assertNewPage(CalculatorPage::new);
     }
 
+
+    private static String c1Name = "SWEN 352";
+    private static String c1Credits = "3";
+    private static String c1Grade = "A";
+    private static String expected = "1: 4.00";
+
+
     @Test
     @Order(3)
     void addCourseDetails(){
-        // calculatorPage.addCourse();
         List<Course> courses = calculatorPage.getCourseList();
-        courses.get(0).insertCourseName("SWEN 352");
+        Course first = courses.get(0);
+        first.insertCourseName("SWEN 352");
+        assertEquals("SWEN 352", first.getCourseName());
 
+        first.insertCourseGrade(c1Grade);
+        assertEquals(expected, first.getCourseGrade());
 
-
+        calculatorPage.calculateGPA();
+        assertEquals("4.00", calculatorPage.getTermGPA());
+        assertEquals("4.00", calculatorPage.getCumulativeGPA());
     }
-
-    
 }

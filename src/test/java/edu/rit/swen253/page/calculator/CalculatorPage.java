@@ -19,12 +19,8 @@ public class CalculatorPage extends AbstractAngularPage {
 
     public void addCourse(){
         DomElement buttonParent = angularView.findChildBy(By.className("buttonRow"));
-        System.out.println(buttonParent);
-        // System.out.println(buttonParent);
         DomElement button = buttonParent.findChildBy(By.className("secondaryButton"));
         button.click();
-        System.out.println("success");
-        // button.click();
     }
 
     public List<Course> getCourseList(){
@@ -32,6 +28,21 @@ public class CalculatorPage extends AbstractAngularPage {
         return courses.stream()
             .map(domElement -> new Course(domElement))
             .collect(Collectors.toList());
+    }
+    public String getTermGPA(){
+        List<DomElement> results = angularView.findChildrenBy(By.className("results"));
+        return results.get(0).getText();
+    }
+
+    public String getCumulativeGPA(){
+        List<DomElement> results = angularView.findChildrenBy(By.className("results"));
+        return results.get(1).getText();
+    }
+
+    public void calculateGPA(){
+        DomElement button = angularView.findChildBy(By.className("primaryButton"));
+        System.out.println(button);
+        button.click();
     }
 
 
