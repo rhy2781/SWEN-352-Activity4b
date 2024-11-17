@@ -12,7 +12,7 @@ import edu.rit.swen253.utils.DomElement;
  * @author <a href='mailto:rhy2781@rit.edu'>Robert Yamasaki</a>
  */
 public class Course {
-    public DomElement container;
+    private DomElement container;
 
     public Course(final DomElement courseContainer){
         this.container = courseContainer;

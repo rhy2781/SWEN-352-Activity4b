@@ -29,7 +29,7 @@ public class CalculatorPage extends AbstractAngularPage {
     public void resetPage(){
         DomElement button = angularView.findChildBy(By.className("secondaryButton"));
         button.click();
-                WebDriver driver = SeleniumUtils.getDriver();
+        WebDriver driver = SeleniumUtils.getDriver();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         wait.until(d -> getCourseList().size() == 1);
     }

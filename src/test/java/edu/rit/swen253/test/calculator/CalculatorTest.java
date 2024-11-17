@@ -3,7 +3,6 @@ package edu.rit.swen253.test.calculator;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -11,14 +10,11 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import edu.rit.swen253.page.calculator.CalculatorPage;
 import edu.rit.swen253.page.calculator.Course;
 import edu.rit.swen253.page.tiger.TigerCenterHomePage;
 import edu.rit.swen253.test.AbstractWebTest;
-import edu.rit.swen253.utils.SeleniumUtils;
 
 /**
  * UI test for Tiger Center's GPA Calculator page
