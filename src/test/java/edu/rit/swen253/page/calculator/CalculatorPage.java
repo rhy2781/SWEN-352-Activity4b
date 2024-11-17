@@ -1,12 +1,16 @@
 package edu.rit.swen253.page.calculator;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import edu.rit.swen253.page.AbstractAngularPage;
 import edu.rit.swen253.utils.DomElement;
+import edu.rit.swen253.utils.SeleniumUtils;
 
 /**
  * Page object for Tiger Center's GPA Calculator page
@@ -25,6 +29,9 @@ public class CalculatorPage extends AbstractAngularPage {
     public void resetPage(){
         DomElement button = angularView.findChildBy(By.className("secondaryButton"));
         button.click();
+                WebDriver driver = SeleniumUtils.getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait.until(d -> getCourseList().size() == 1);
     }
     
     /**
