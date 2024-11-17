@@ -2,11 +2,13 @@ package edu.rit.swen253.page.calculator;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 import edu.rit.swen253.page.AbstractAngularPage;
 import edu.rit.swen253.utils.DomElement;
@@ -25,7 +27,9 @@ public class CalculatorPage extends AbstractAngularPage {
 
     public List<Course> getCourseList(){
         List<DomElement> courses = angularView.findChildrenBy(By.className("courseRow"));
+
         return courses.stream()
+            .filter(e -> e.getWebElement().isDisplayed())
             .map(domElement -> new Course(domElement))
             .collect(Collectors.toList());
     }
@@ -41,7 +45,6 @@ public class CalculatorPage extends AbstractAngularPage {
 
     public void calculateGPA(){
         DomElement button = angularView.findChildBy(By.className("primaryButton"));
-        System.out.println(button);
         button.click();
     }
 
