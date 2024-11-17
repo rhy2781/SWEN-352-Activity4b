@@ -7,13 +7,17 @@ import org.openqa.selenium.support.ui.Select;
 
 import edu.rit.swen253.utils.DomElement;
 
+/**
+ * Object representing courses used to calculate GPA on Tiger Center's GPA calculator page
+ * @author <a href='mailto:rhy2781@rit.edu'>Robert Yamasaki</a>
+ */
 public class Course {
     public DomElement container;
 
     public Course(final DomElement courseContainer){
         this.container = courseContainer;
     }
-    
+
     /**
      * Delete the course from the list
      */
@@ -21,6 +25,7 @@ public class Course {
         DomElement delete = container.findChildBy(By.className("hoverPointer"));
         delete.click();
     }
+
     /**
      * @param courseName The name associated with the course
      */
@@ -28,6 +33,7 @@ public class Course {
         DomElement input = container.findChildBy(By.className("courseInputWidth"));
         input.enterText(courseName);
     }
+
     /**
      * The input field for course credits is associated with two instance of input.
      * The second instance refers to the one where credits is inputted
@@ -39,6 +45,7 @@ public class Course {
         insert.clear();
         insert.enterText(credits);
     }
+
     /**
      * @param grade The grade associated with the course
      */

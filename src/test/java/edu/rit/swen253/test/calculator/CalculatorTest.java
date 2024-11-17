@@ -10,23 +10,20 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.JavascriptExecutor;
 
 import edu.rit.swen253.page.calculator.CalculatorPage;
 import edu.rit.swen253.page.calculator.Course;
 import edu.rit.swen253.page.tiger.TigerCenterHomePage;
 import edu.rit.swen253.test.AbstractWebTest;
-import edu.rit.swen253.utils.BrowserWindow;
-import edu.rit.swen253.utils.DomElement;
-import edu.rit.swen253.utils.SeleniumUtils;
 
+/**
+ * UI test for Tiger Center's GPA Calculator page
+ * @author <a href='mailto:rhy2781@rit.edu'>Robert Yamasaki</a>
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CalculatorTest extends AbstractWebTest{
 
     private TigerCenterHomePage homePage;
-    private BrowserWindow<TigerCenterHomePage> homeWindow;
-
-    private BrowserWindow<CalculatorPage> window;
     private CalculatorPage calculatorPage;
 
     @Test
@@ -35,7 +32,6 @@ public class CalculatorTest extends AbstractWebTest{
     void navigateToHomePage(){
             homePage = navigateToPage("https://tigercenter.rit.edu", TigerCenterHomePage::new);
             assertNotNull(homePage);
-            homeWindow = getCurrentWindow();
     }
 
     @Test
@@ -97,7 +93,8 @@ public class CalculatorTest extends AbstractWebTest{
 
         // reset the page for the next test
         calculatorPage.resetPage();
-        assertEquals(1, calculatorPage.getCourseList().size());
+        courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
     }
 
 
@@ -125,6 +122,7 @@ public class CalculatorTest extends AbstractWebTest{
         
         // prepare for next test by resetting courses
         calculatorPage.resetPage();
+        courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
     }
 
@@ -181,9 +179,6 @@ public class CalculatorTest extends AbstractWebTest{
         // reset to one empty course
         calculatorPage.resetPage();
         courses = calculatorPage.getCourseList();
-        for(Course c: courses){
-            System.out.println(c.getCourseName());
-        }
-        assertEquals(1, calculatorPage.getCourseList().size());
+        assertEquals(1, courses.size());
     }
 }
