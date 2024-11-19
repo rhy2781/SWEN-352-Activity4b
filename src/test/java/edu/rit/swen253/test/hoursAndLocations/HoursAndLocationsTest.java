@@ -12,7 +12,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.openqa.selenium.WebElement;
 
 import edu.rit.swen253.page.SimplePage;
 import edu.rit.swen253.page.hoursAndLocations.HoursAndLocationsPage;
@@ -30,6 +29,7 @@ public class HoursAndLocationsTest extends AbstractWebTest {
     @Test
     @Order(1)
     public void navigateToHomePage() {
+        LOG.info("Navigating to TigerCenter home page");
         homePage = navigateToPage("https://tigercenter.rit.edu", TigerCenterHomePage::new);
         assertNotNull(homePage);
     }
@@ -37,25 +37,59 @@ public class HoursAndLocationsTest extends AbstractWebTest {
     @Test
     @Order(2)
     public void navigateToHoursAndLocations() {
+        LOG.info("Navigating to Hours and Locations page");
         homePage.selectHoursAndLocations();
-        final SimplePage hoursAndLocationsPage = assertNewPage(SimplePage::new);
+        final SimplePage simplePage = assertNewPage(SimplePage::new);
 
         sleep(1);
 
-        assertEquals("https://tigercenter.rit.edu/tigerCenterApp/api/hours-and-locations", hoursAndLocationsPage.getURL());
-        LOG.info("Current URL: " + hoursAndLocationsPage.getURL());
+        assertEquals("https://tigercenter.rit.edu/tigerCenterApp/api/hours-and-locations", simplePage.getURL());
+        LOG.info("Current URL: " + simplePage.getURL());
+        hoursAndLocationsPage = new HoursAndLocationsPage();
     }
 
-    // TODO: Rewrite this test
     @Test
     @Order(3)
     public void testDiningHours() {
-        hoursAndLocationsPage = new HoursAndLocationsPage();
+        LOG.info("Testing dining hours");
         hoursAndLocationsPage.clickSortOpenNow();
 
+        List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllDiningLocations();
         List<HoursAndLocationsView> diningLocations = hoursAndLocationsPage.getOpenDiningLocations();
-        for (HoursAndLocationsView location : diningLocations) {
-            LOG.info("Location: " + location.getTitle());
-        }
+
+        // Ensure that it's not grabbing all locations
+        assertNotEquals(allLocations.size(), diningLocations.size());
+    }
+
+    @Test
+    @Order(4)
+    public void testComputerLabsWithPrinters() {
+        LOG.info("Testing computer labs with printers");
+        hoursAndLocationsPage.clickComputerIcon();
+
+        // Apply filter for labs that have printers
+        hoursAndLocationsPage.applyFilterLabs("Printer");
+        List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllComputerLabLocations();
+
+        // // There should only be 12 locations with printers
+        assertEquals(12, allLocations.size());
+    }
+
+    @Test
+    @Order(5)
+    public void testStudentAffairs() {
+        LOG.info("Testing student affairs");
+        hoursAndLocationsPage.clickStudentAffairsIcon();
+
+        List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllStudentAffairsLocations();
+        assertEquals(8, allLocations.size());
+
+        // Check if title and description matches with first location
+        String expectedTitle = "Case Management";
+        String expectedDescription = "The Case Management team assists students in navigating health and wellness services both on and off campus.";
+
+        HoursAndLocationsView firstLocation = allLocations.get(0);
+        assertEquals(expectedTitle, firstLocation.getTitle());
+        assertEquals(expectedDescription, firstLocation.getDescription());
     }
 }
