@@ -19,6 +19,11 @@ import edu.rit.swen253.page.hoursAndLocations.HoursAndLocationsView;
 import edu.rit.swen253.page.tiger.TigerCenterHomePage;
 import edu.rit.swen253.test.AbstractWebTest;
 
+/**
+ * Test class for the Hours and Locations page.
+ * 
+ * @author Austyn Wright
+ */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class HoursAndLocationsTest extends AbstractWebTest {
 
@@ -26,6 +31,9 @@ public class HoursAndLocationsTest extends AbstractWebTest {
     private TigerCenterHomePage homePage;
     private HoursAndLocationsPage hoursAndLocationsPage;
 
+    /**
+     * Navigates to the TigerCenter home page.
+     */
     @Test
     @Order(1)
     public void navigateToHomePage() {
@@ -34,6 +42,9 @@ public class HoursAndLocationsTest extends AbstractWebTest {
         assertNotNull(homePage);
     }
 
+    /**
+     * Navigates to the Hours and Locations page.
+     */
     @Test
     @Order(2)
     public void navigateToHoursAndLocations() {
@@ -50,8 +61,8 @@ public class HoursAndLocationsTest extends AbstractWebTest {
 
     @Test
     @Order(3)
-    public void testDiningHours() {
-        LOG.info("Testing dining hours");
+    public void testDiningLocations() {
+        LOG.info("Testing dining location");
         hoursAndLocationsPage.clickSortOpenNow();
 
         List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllDiningLocations();
@@ -65,13 +76,13 @@ public class HoursAndLocationsTest extends AbstractWebTest {
     @Order(4)
     public void testComputerLabsWithPrinters() {
         LOG.info("Testing computer labs with printers");
-        hoursAndLocationsPage.clickComputerIcon();
+        hoursAndLocationsPage.clickSection("Computer Labs");
 
         // Apply filter for labs that have printers
         hoursAndLocationsPage.applyFilterLabs("Printer");
         List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllComputerLabLocations();
 
-        // // There should only be 12 locations with printers
+        // There should only be 12 locations with printers
         assertEquals(12, allLocations.size());
     }
 
@@ -79,7 +90,7 @@ public class HoursAndLocationsTest extends AbstractWebTest {
     @Order(5)
     public void testStudentAffairs() {
         LOG.info("Testing student affairs");
-        hoursAndLocationsPage.clickStudentAffairsIcon();
+        hoursAndLocationsPage.clickSection("Student Affairs");
 
         List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllStudentAffairsLocations();
         assertEquals(8, allLocations.size());
