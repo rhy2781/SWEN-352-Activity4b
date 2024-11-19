@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -21,26 +22,10 @@ import edu.rit.swen253.test.AbstractWebTest;
  * @author <a href='mailto:rhy2781@rit.edu'>Robert Yamasaki</a>
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FullScheduleGPATest extends AbstractWebTest{
+public class CalculatorTest extends AbstractWebTest{
 
     private TigerCenterHomePage homePage;
     private CalculatorPage calculatorPage;
-
-    @Test
-    @Order(1)
-    @DisplayName("First, navigate to the Tiger Center Calculator Page")
-    void navigateToHomePage(){
-            homePage = navigateToPage("https://tigercenter.rit.edu", TigerCenterHomePage::new);
-            assertNotNull(homePage);
-    }
-
-    @Test
-    @Order(2)
-    @DisplayName("Click on the GPA calculator")
-    void navigateToCalculator(){
-        homePage.selectGPACalculator();
-        calculatorPage = assertNewPage(CalculatorPage::new);
-    }
 
     private static String c1Name = "SWEN 352";
     private static String c1Credits = "3";
@@ -61,6 +46,78 @@ public class FullScheduleGPATest extends AbstractWebTest{
     private static String c4Credits = "3";
     private static String c4GradeOption = "C+";
     private static String c4GradeValue = "6: 2.33";
+
+
+    @BeforeEach
+    void navigateToHomePage(){
+        homePage = navigateToPage("https://tigercenter.rit.edu", TigerCenterHomePage::new);
+        assertNotNull(homePage);
+        homePage.selectGPACalculator();
+        calculatorPage = assertNewPage(CalculatorPage::new);
+    }
+
+    @Test
+    @Order(1)
+    @DisplayName("Test Add/Delete Functionality")
+    void addDeleteCourses(){
+        List<Course> courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
+
+        calculatorPage.addCourse(2);
+        courses = calculatorPage.getCourseList();
+        assertEquals(3, courses.size());
+
+        // insert details for courses 
+        Course first = courses.get(0);
+        first.insertCourseName(c1Name);
+        Course second = courses.get(1);
+        second.insertCourseName(c2Name);
+        Course third = courses.get(2);
+        third.insertCourseName(c3Name);
+
+        // delete the first two courses
+        first.deleteCourse();
+        second.deleteCourse();
+
+        // get updated list of courses, and verify that the single one that remains 
+        // is the third course that was added and it is the only one too
+        courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
+        assertEquals(c3Name, courses.get(0).getCourseName());
+
+        // reset the page for the next test
+        calculatorPage.resetPage();
+        courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Test w/ one course")
+    /** Insert one course and verify that the GPA calculator is correct */
+    void addCourseDetails(){
+        List<Course> courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
+        Course first = courses.get(0);
+
+        first.insertCourseName(c1Name);
+        assertEquals(c1Name, first.getCourseName());
+        
+        first.insertCourseCredits(c1Credits);
+        assertEquals(c1Credits, first.getCourseCredits());
+        
+        first.insertCourseGrade(c1GradeOption);
+        assertEquals(c1GradeValue, first.getCourseGrade());
+
+        calculatorPage.calculateGPA();
+        assertEquals("4.00", calculatorPage.getTermGPA());
+        assertEquals("4.00", calculatorPage.getCumulativeGPA());
+        
+        // prepare for next test by resetting courses
+        calculatorPage.resetPage();
+        courses = calculatorPage.getCourseList();
+        assertEquals(1, courses.size());
+    }
 
     @Test
     @Order(4)
@@ -116,4 +173,6 @@ public class FullScheduleGPATest extends AbstractWebTest{
         courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
     }
+    
+
 }
