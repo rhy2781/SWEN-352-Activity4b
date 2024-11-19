@@ -110,6 +110,10 @@ public class HoursAndLocationsPage extends AbstractAngularPage {
      *         lab.
      */
     public List<HoursAndLocationsView> getAllComputerLabLocations() {
+        // Wait for the computer labs section to load before getting locations
+        SeleniumUtils.getShortWait()
+                .until(ExpectedConditions.presenceOfElementLocated(By.className("labsTabVerticalLine")));
+
         List<DomElement> allLocations = findAllOnPage(
                 By.cssSelector(".labsTabVerticalLine .col-lg-12.ng-star-inserted"));
 
@@ -123,6 +127,10 @@ public class HoursAndLocationsPage extends AbstractAngularPage {
      *         affairs location.
      */
     public List<HoursAndLocationsView> getAllStudentAffairsLocations() {
+        // Wait for the student affairs section to load before getting locations
+        SeleniumUtils.getShortWait()
+                .until(ExpectedConditions.presenceOfElementLocated(By.className("student-affairsTabVerticalLine")));
+
         List<DomElement> allLocations = findAllOnPage(
                 By.cssSelector(".student-affairsTabVerticalLine .col-lg-12.ng-star-inserted"));
 
