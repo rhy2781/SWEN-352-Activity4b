@@ -1,6 +1,9 @@
 package edu.rit.swen253.page.hoursAndLocations;
 
+import static edu.rit.swen253.utils.TimingUtils.sleep;
+
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.openqa.selenium.By;
@@ -16,6 +19,8 @@ import edu.rit.swen253.utils.SeleniumUtils;
  * @author Austyn Wright
  */
 public class HoursAndLocationsPage extends AbstractAngularPage {
+
+    private static final Logger LOG = Logger.getLogger(HoursAndLocationsPage.class.getName());
 
     public HoursAndLocationsPage() {
         super("hours-and-locations");
@@ -75,8 +80,10 @@ public class HoursAndLocationsPage extends AbstractAngularPage {
             findOnPage(By.id("mat-tab-label-0-1")).click();
         else if (section.equals("Student Affairs"))
             findOnPage(By.id("mat-tab-label-0-2")).click();
+        else if (section.equals("Dining Locations"))
+            findOnPage(By.id("mat-tab-label-0-0")).click();
         else
-            findOnPage(By.id("mat-tab-label-0-0")).click(); // Dining Locations
+            throw new IllegalArgumentException("Invalid section: " + section);
 
         SeleniumUtils.getShortWait().until(d -> d.findElement(By.className("mat-tab-label-active")));
     }
@@ -121,19 +128,16 @@ public class HoursAndLocationsPage extends AbstractAngularPage {
     }
 
     /**
-     * Gets all student affairs locations on the page.
+     * Gets student affair location on the page based on the title of location
+     * given.
      * 
-     * @return a list of HoursAndLocationsView objects representing each student
-     *         affairs location.
+     * @param locationTitle the title of location to get.
+     * @return a HoursAndLocationsView object representing the student affair
+     *         location.
      */
-    public List<HoursAndLocationsView> getAllStudentAffairsLocations() {
-        // Wait for the student affairs section to load before getting locations
-        SeleniumUtils.getShortWait()
-                .until(ExpectedConditions.presenceOfElementLocated(By.className("student-affairsTabVerticalLine")));
-
-        List<DomElement> allLocations = findAllOnPage(
-                By.cssSelector(".student-affairsTabVerticalLine .col-lg-12.ng-star-inserted"));
-
-        return allLocations.stream().map(HoursAndLocationsView::new).toList();
+    public HoursAndLocationsView getStudentAffair(String locationTitle) {
+        findOnPage(By.id("mat-input-2")).enterText(locationTitle);
+        return new HoursAndLocationsView(
+                findOnPage(By.cssSelector(".student-affairsTabVerticalLine .col-lg-12.ng-star-inserted")));
     }
 }

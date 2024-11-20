@@ -31,12 +31,14 @@ public class HoursAndLocationsView {
         return element.findChildBy(By.xpath(".//div[contains(@class, 'TabEateryName')]")).getText();
     }
 
-    // public String getHours() {
-    // DomElement locationDetails = element
-    // .findChildBy(By.xpath(".//div[contains(@class, 'TabHours')]"));
-    // return
-    // locationDetails.findChildBy(By.xpath(".//span[@class='greenText']")).getText();
-    // }
+    /**
+     * @return the hours of the location.
+     */
+    public String getHours() {
+        DomElement locationDetails = element
+                .findChildBy(By.xpath(".//div[contains(@class, 'TabHours')]"));
+        return locationDetails.findChildBy(By.xpath(".//span[@class='greenText']")).getText();
+    }
 
     /**
      * @return the description of the location.
