@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,7 @@ public class CalculatorTest extends AbstractWebTest{
 
     private TigerCenterHomePage homePage;
     private CalculatorPage calculatorPage;
+    private Logger logger = Logger.getLogger(CalculatorTest.class.getName());
 
     private static String c1Name = "SWEN 352";
     private static String c1Credits = "3";
@@ -50,24 +52,29 @@ public class CalculatorTest extends AbstractWebTest{
 
     @BeforeEach
     void navigateToHomePage(){
+        this.logger.info("Navigate to base Calculator page");
         homePage = navigateToPage("https://tigercenter.rit.edu", TigerCenterHomePage::new);
         assertNotNull(homePage);
         homePage.selectGPACalculator();
         calculatorPage = assertNewPage(CalculatorPage::new);
+        assertNotNull(calculatorPage);
     }
 
     @Test
     @Order(1)
     @DisplayName("Test Add/Delete Functionality")
     void addDeleteCourses(){
+        this.logger.info("Testing Add/Delete Functionality");
         List<Course> courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
 
+        this.logger.info("adding two courses for a total of three courses");
         calculatorPage.addCourse(2);
         courses = calculatorPage.getCourseList();
         assertEquals(3, courses.size());
 
         // insert details for courses 
+        this.logger.info("adding details for all three courses");
         Course first = courses.get(0);
         first.insertCourseName(c1Name);
         Course second = courses.get(1);
@@ -76,6 +83,7 @@ public class CalculatorTest extends AbstractWebTest{
         third.insertCourseName(c3Name);
 
         // delete the first two courses
+        this.logger.info("deleting course one and two");
         first.deleteCourse();
         second.deleteCourse();
 
@@ -84,11 +92,15 @@ public class CalculatorTest extends AbstractWebTest{
         courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
         assertEquals(c3Name, courses.get(0).getCourseName());
+        this.logger.info("Assert that the number of courses is 1, and the name is correlated to the third course");
+        this.logger.info("Number of courses: " + courses.size() + "Course Name: " + courses.get(0).getCourseName());
 
         // reset the page for the next test
         calculatorPage.resetPage();
         courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
+        this.logger.info("Resetting the page");
+        this.logger.info("");
     }
 
     @Test
@@ -96,6 +108,8 @@ public class CalculatorTest extends AbstractWebTest{
     @DisplayName("Test w/ one course")
     /** Insert one course and verify that the GPA calculator is correct */
     void addCourseDetails(){
+        this.logger.info("Testing Insertion of Details for one course");
+
         List<Course> courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
         Course first = courses.get(0);
@@ -108,15 +122,18 @@ public class CalculatorTest extends AbstractWebTest{
         
         first.insertCourseGrade(c1GradeOption);
         assertEquals(c1GradeValue, first.getCourseGrade());
-
+        this.logger.info("Course Inserted - Name: " + first.getCourseName() + " Credits: " + first.getCourseCredits() + " Grade: " + first.getCourseGrade());
+ 
         calculatorPage.calculateGPA();
         assertEquals("4.00", calculatorPage.getTermGPA());
         assertEquals("4.00", calculatorPage.getCumulativeGPA());
         
         // prepare for next test by resetting courses
+        this.logger.info("Resetting Page");
         calculatorPage.resetPage();
         courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
+        this.logger.info("");
     }
 
     @Test
@@ -135,6 +152,7 @@ public class CalculatorTest extends AbstractWebTest{
         assertEquals(c1Name, first.getCourseName());
         assertEquals(c1GradeValue, first.getCourseGrade());
         assertEquals(c1Credits, first.getCourseCredits());
+        this.logger.info("Course Inserted - Name: " + first.getCourseName() + " Credits: " + first.getCourseCredits() + " Grade: " + first.getCourseGrade());
 
         // insert the second course details
         Course second = courses.get(1);
@@ -144,6 +162,7 @@ public class CalculatorTest extends AbstractWebTest{
         assertEquals(c2Name, second.getCourseName());
         assertEquals(c2GradeValue, second.getCourseGrade());
         assertEquals(c2Credits, second.getCourseCredits());
+        this.logger.info("Course Inserted - Name: " + second.getCourseName() + " Credits: " + second.getCourseCredits() + " Grade: " + second.getCourseGrade());
 
         // insert the third course details
         Course third = courses.get(2);
@@ -153,6 +172,7 @@ public class CalculatorTest extends AbstractWebTest{
         assertEquals(c3Name, third.getCourseName());
         assertEquals(c3GradeValue, third.getCourseGrade());
         assertEquals(c3Credits, third.getCourseCredits());
+        this.logger.info("Course Inserted - Name: " + third.getCourseName() + " Credits: " + third.getCourseCredits() + " Grade: " + third.getCourseGrade());
 
         // insert the fourth course details
         Course fourth = courses.get(3);
@@ -162,16 +182,20 @@ public class CalculatorTest extends AbstractWebTest{
         assertEquals(c4Name, fourth.getCourseName());
         assertEquals(c4GradeValue, fourth.getCourseGrade());
         assertEquals(c4Credits, fourth.getCourseCredits());
-
+        this.logger.info("Course Inserted - Name: " + fourth.getCourseName() + " Credits: " + fourth.getCourseCredits() + " Grade: " + fourth.getCourseGrade());
+ 
         // check the term and cumulative gpa
         calculatorPage.calculateGPA();
         assertEquals("1.83", calculatorPage.getTermGPA());
         assertEquals("1.83", calculatorPage.getCumulativeGPA());
+        this.logger.info("Term GPA: " + calculatorPage.getTermGPA() + " Cumulative GPA: " + calculatorPage.getCumulativeGPA());
         
         // reset to one empty course
+        this.logger.info("Resetting Page");
         calculatorPage.resetPage();
         courses = calculatorPage.getCourseList();
         assertEquals(1, courses.size());
+        this.logger.info("");
     }
     
 
