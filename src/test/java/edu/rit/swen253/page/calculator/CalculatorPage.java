@@ -78,6 +78,7 @@ public class CalculatorPage extends AbstractAngularPage {
         return results.get(1).getText();
     }
 
+    
     /**
      * Calculate the GPA
      */
