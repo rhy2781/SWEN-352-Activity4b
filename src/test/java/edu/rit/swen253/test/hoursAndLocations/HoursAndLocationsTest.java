@@ -84,6 +84,8 @@ public class HoursAndLocationsTest extends AbstractWebTest {
 
         // There should only be 12 locations with printers
         assertEquals(12, allLocations.size());
+
+        sleep(1);
     }
 
     @Test
@@ -92,15 +94,11 @@ public class HoursAndLocationsTest extends AbstractWebTest {
         LOG.info("Testing student affairs");
         hoursAndLocationsPage.clickSection("Student Affairs");
 
-        List<HoursAndLocationsView> allLocations = hoursAndLocationsPage.getAllStudentAffairsLocations();
-        assertEquals(8, allLocations.size());
+        String expectedTitle = "Red Barn Climbing Gym";
+        String expectedDescription = "RBC is a bouldering-only gym, where climbs are shorter and falls are protected with padding. Climbing routes are set and maintained to accommodate all abilities and skill levels, from beginner to expert.All non-RIT visitors must be 18 years of age or older.The Red Barn is a 100 year old \"Wells\" style dairy barn that lacks many modern amenities such as heat and plumbing. Please dress based on the outside temperature. There is a \"Port-A-John\" located in the main parking lot that is available to all visitors.RBC is open when RIT semester classes are in session and closed during exam weeks and breaks.";
 
-        // Check if title and description matches with first location
-        String expectedTitle = "Case Management";
-        String expectedDescription = "The Case Management team assists students in navigating health and wellness services both on and off campus.";
-
-        HoursAndLocationsView firstLocation = allLocations.get(0);
-        assertEquals(expectedTitle, firstLocation.getTitle());
-        assertEquals(expectedDescription, firstLocation.getDescription());
+        HoursAndLocationsView result = hoursAndLocationsPage.getStudentAffair(expectedTitle);
+        assertEquals(expectedTitle, result.getTitle());
+        assertEquals(expectedDescription, result.getDescription());
     }
 }
